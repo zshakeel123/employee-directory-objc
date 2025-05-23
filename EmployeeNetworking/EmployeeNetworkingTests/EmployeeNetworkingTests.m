@@ -9,7 +9,6 @@
 #import <EmployeeNetworking/EmployeeService.h>
 #import <EmployeeNetworking/EmployeeListResponse.h>
 #import <EmployeeNetworking/Employee.h>
-#import <EmployeeNetworking/ModuleConstants.h>
 #import "MockURLSession.h"
 
 
