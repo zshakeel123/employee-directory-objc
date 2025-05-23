@@ -13,34 +13,29 @@ NS_ASSUME_NONNULL_BEGIN
 // Define an error domain for EmployeeService specific errors
 NSString *const EmployeeServiceErrorDomain = @"com.zeeshan.EmployeeNetworking.ErrorDomain";
 
-// Define specific error codes
-typedef NS_ENUM(NSInteger, EmployeeServiceErrorCode) {
-    EmployeeServiceErrorCodeInvalidURL = 1,
-    EmployeeServiceErrorCodeNoData = 2,
-    EmployeeServiceErrorCodeJSONParsingFailed = 3,
-    EmployeeServiceErrorCodeInvalidResponseFormat = 4,
-    EmployeeServiceErrorCodeNetworkError = 5,
-    EmployeeServiceErrorCodeInitializationFailed = 6
-};
-
 // Private Class Extension to store the base URL
 @interface EmployeeService ()
-
 @property (nonatomic, strong, readonly) NSString *baseURLString;
-
+@property (nonatomic, strong, readonly) NSURLSession *session;
 @end
 
 @implementation EmployeeService
 
-- (instancetype)initWithBaseURLString:(NSString *)baseURLString {
+- (instancetype)initWithBaseURLString:(NSString *)baseURLString andSession:(NSURLSession *)session {
     self = [super init];
     if (self) {
         if (!baseURLString || baseURLString.length == 0) {
-            // Log or handle error if base URL is invalid at initialization
             NSLog(@"Error: EmployeeService initialized with an empty or nil base URL string.");
             return nil;
         }
+        
+        if (!session) {
+            NSLog(@"Error: EmployeeService initialized with a nil NSURLSession.");
+            return nil;
+        }
+        
         _baseURLString = [baseURLString copy];
+        _session = session;
     }
     return self;
 }
@@ -83,9 +78,7 @@ typedef NS_ENUM(NSInteger, EmployeeServiceErrorCode) {
         return;
     }
 
-    NSURLSession *session = [NSURLSession sharedSession];
-
-    NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         // 4. Check for Network Errors
         if (error) {
             if (completion) {
