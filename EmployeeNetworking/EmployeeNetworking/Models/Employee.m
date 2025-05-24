@@ -52,6 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
+- (BOOL)isValidEmployee {
+    // Based on your requirement: If any employee is malformed, it is fine to invalidate the entire list of employees in the response - "Lets assume if any employee doesn’t have the Full Name, Team, or Email", then it is invalid and the whole list later will be considered malformed.
+    return (self.fullName.length > 0 &&
+            self.team.length > 0 &&
+            self.emailAddress.length > 0);
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

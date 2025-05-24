@@ -218,10 +218,6 @@
     // Deselect the item to prevent it from staying highlighted
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    // Trigger the segue that you created in the Storyboard
-    // Use the identifier you set for your segue
-    //[self performSegueWithIdentifier:@"ShowEmployeeDetailSegue" sender:indexPath];
-    
     // Get the selected employee
         Employee *selectedEmployee = self.viewModel.employees[indexPath.item];
 
@@ -239,31 +235,5 @@
         
         [self.navigationController pushViewController:detailVC animated:YES];
 }
-
-
-//#pragma mark - Navigation
-//
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    if ([segue.identifier isEqualToString:@"ShowEmployeeDetailSegue"]) {
-//        // Ensure the destination is an EmployeeDetailViewController
-//        if ([segue.destinationViewController isKindOfClass:[EmployeeDetailViewController class]]) {
-//            EmployeeDetailViewController *detailVC = (EmployeeDetailViewController *)segue.destinationViewController;
-//
-//            // 'sender' here will be the indexPath that you passed in performSegueWithIdentifier:sender:
-//            if ([sender isKindOfClass:[NSIndexPath class]]) {
-//                NSIndexPath *indexPath = (NSIndexPath *)sender;
-//
-//                // Get the corresponding Employee object from your ViewModel
-//                Employee *selectedEmployee = self.viewModel.employees[indexPath.item];
-//
-//                // Create an EmployeeDetailViewModel for the selected employee
-//                EmployeeDetailViewModel *detailViewModel = [[EmployeeDetailViewModel alloc] initWithEmployee:selectedEmployee];
-//
-//                // Pass the detail ViewModel to the destination view controller
-//                detailVC.viewModel = detailViewModel;
-//            }
-//        }
-//    }
-//}
 
 @end

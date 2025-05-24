@@ -10,5 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *const kEmployeeAPIBaseURL;
+extern NSString *const kEmployeeAPIURLEmployees;
+extern NSString *const kEmployeeAPIURLEmptyList;
+extern NSString *const kEmployeeAPIURLMalformed;
 
 NS_ASSUME_NONNULL_END

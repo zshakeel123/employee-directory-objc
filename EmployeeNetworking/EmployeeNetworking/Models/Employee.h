@@ -34,6 +34,12 @@ typedef NS_ENUM(NSInteger, EmployeeType){
 // Utility functions
 - (EmployeeType)parseEmployeeTypeForKey:(NSString *)key fromDictionary:(NSDictionary *)dictionary;
 
+/**
+ * @brief Checks if the employee object has all required fields for display.
+ * @return YES if all required fields are present and valid, NO otherwise.
+ */
+- (BOOL)isValidEmployee;
+
 @end
 
 NS_ASSUME_NONNULL_END

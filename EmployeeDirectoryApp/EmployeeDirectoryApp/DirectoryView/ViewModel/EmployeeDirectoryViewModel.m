@@ -44,15 +44,13 @@
 }
 
 - (void)fetchEmployees {
-    if (self.isLoading) { // Use the public getter here
+    if (self.isLoading) {
         return;
     }
 
-    // Update the ivars
     _errorMessage = nil;
     _isLoading = YES;
 
-    // Notify delegate about loading state change immediately
     if ([self.delegate respondsToSelector:@selector(employeeDirectoryViewModel:didUpdateLoadingState:)]) {
         [self.delegate employeeDirectoryViewModel:self didUpdateLoadingState:self.isLoading];
     }
@@ -63,17 +61,45 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         
         if (!strongSelf) {
-                    return;
-                }
+            return;
+        }
         
-        // Always set loading to NO when the request completes
-        strongSelf.isLoading = NO;
+        strongSelf.isLoading = NO; // Always set loading to NO when the request completes
 
         if (employeeList) {
-            strongSelf.employees = employeeList.employees;
-            strongSelf.errorMessage = nil;
+            BOOL isMalformed = NO;
+            NSMutableArray<Employee *> *validEmployees = [NSMutableArray array];
+
+            // Iterate through the fetched employees and validate each one
+            for (Employee *employee in employeeList.employees) {
+                if ([employee isValidEmployee]) { // Use the new validation method
+                    [validEmployees addObject:employee];
+                } else {
+                    NSLog(@"Malformed employee found: %@", employee.uuid);
+                    isMalformed = YES; // Mark the entire list as malformed
+                    break; // As per requirement, invalidate the entire list on first malformed employee
+                }
+            }
+
+            if (isMalformed) {
+                // If any employee was malformed, invalidate the entire list and set error
+                strongSelf.employees = @[]; // Clear the list
+                strongSelf.errorMessage = @"Employee List is Malformed."; // Specific error message
+                
+                // You might also want to create a specific NSError object here if the ViewController needs it
+                // NSError *malformedError = [NSError errorWithDomain:EmployeeServiceErrorDomain
+                //                                                 code:EmployeeServiceErrorCodeMalformedEmployeeData
+                //                                             userInfo:@{NSLocalizedDescriptionKey: strongSelf.errorMessage}];
+                // If you pass an NSError, adjust the delegate to include it.
+            } else {
+                // All employees are valid
+                strongSelf.employees = [validEmployees copy];
+                strongSelf.errorMessage = nil; // Clear any previous error
+            }
+
         } else {
-            strongSelf.employees = @[];
+            // Original network/parsing error from EmployeeService
+            strongSelf.employees = @[]; // Clear data on error
             NSString *userFriendlyErrorMessage = @"An unknown error occurred.";
 
             if (error) {
@@ -105,15 +131,14 @@
             NSLog(@"Error fetching employees: %@", error);
         }
 
-        // Notify delegate about data update
-        if ([self.delegate respondsToSelector:@selector(employeeDirectoryViewModelDidUpdateData:)]) {
-            [self.delegate employeeDirectoryViewModelDidUpdateData:self];
-        }
-        // Notify delegate about error message (if any)
-        if ([self.delegate respondsToSelector:@selector(employeeDirectoryViewModel:didEncounterError:)] && self.errorMessage) {
-            [self.delegate employeeDirectoryViewModel:self didEncounterError:self.errorMessage];
+        // Notify delegate about the update
+        if ([strongSelf.delegate respondsToSelector:@selector(employeeDirectoryViewModel:didEncounterError:)] && strongSelf.errorMessage) {
+            [strongSelf.delegate employeeDirectoryViewModel:strongSelf didEncounterError:strongSelf.errorMessage];
+        } else if ([strongSelf.delegate respondsToSelector:@selector(employeeDirectoryViewModelDidUpdateData:)]) {
+            [strongSelf.delegate employeeDirectoryViewModelDidUpdateData:strongSelf];
         }
     }];
 }
+
 
 @end

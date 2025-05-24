@@ -7,7 +7,7 @@
 
 #import "AppConstants.h"
 
-// AppConstants.m
-#import "AppConstants.h"
-
-NSString *const kEmployeeAPIBaseURL = @"https://s3.amazonaws.com/sq-mobile-interview/employees.json";
+NSString *const kEmployeeAPIURLEmployees = @"https://s3.amazonaws.com/sq-mobile-interview/employees.json";
+NSString *const kEmployeeAPIURLEmptyList = @"https://s3.amazonaws.com/sq-mobile-interview/employees_empty.json";
+NSString *const kEmployeeAPIURLMalformed = @"https://s3.amazonaws.com/sq-mobile-interview/employees_malformed.json";
+NSString *const kEmployeeAPIBaseURL = kEmployeeAPIURLEmployees;
