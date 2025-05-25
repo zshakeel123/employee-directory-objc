@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <EmployeeNetworking/Employee.h>
+#import <EmployeeNetworking/EmployeeService.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -56,11 +57,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  * @brief Initializes the view model with the necessary dependencies.
- * @param baseURLString The base URL string for the EmployeeService.
- * @param session The NSURLSession instance to use for networking.
+ * @param employeeService networking service
  * @return An initialized EmployeeDirectoryViewModel instance.
  */
-- (instancetype)initWithBaseURLString:(NSString *)baseURLString session:(NSURLSession *)session NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithEmployeeService:(EmployeeService *)employeeService NS_DESIGNATED_INITIALIZER;
+
 
 // Prevent direct calls to init
 - (instancetype)init NS_UNAVAILABLE;

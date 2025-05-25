@@ -22,13 +22,13 @@
 
 @implementation EmployeeDirectoryViewModel
 
-- (instancetype)initWithBaseURLString:(NSString *)baseURLString session:(NSURLSession *)session {
+- (instancetype)initWithEmployeeService:(EmployeeService *)employeeService {
     self = [super init];
     if (self) {
-        _employeeService = [[EmployeeService alloc] initWithBaseURLString:baseURLString andSession:session];
+        _employeeService = employeeService;
         if (!_employeeService) {
-            NSLog(@"Error: Failed to initialize EmployeeService in ViewModel.");
-            return nil;
+            NSLog(@"Error: EmployeeService cannot be nil during ViewModel initialization.");
+            return nil; // This indicates a programming error, should ideally assert or throw.
         }
         _employees = @[];
         _isLoading = NO;
@@ -131,6 +131,11 @@
             [strongSelf.delegate employeeDirectoryViewModel:strongSelf didEncounterError:strongSelf.errorMessage];
         } else if ([strongSelf.delegate respondsToSelector:@selector(employeeDirectoryViewModelDidUpdateData:)]) {
             [strongSelf.delegate employeeDirectoryViewModelDidUpdateData:strongSelf];
+        }
+        
+        // Notify delegate that loading has STOPPED, this important for the unit tests
+        if ([strongSelf.delegate respondsToSelector:@selector(employeeDirectoryViewModel:didUpdateLoadingState:)]) {
+            [strongSelf.delegate employeeDirectoryViewModel:strongSelf didUpdateLoadingState:strongSelf.isLoading];
         }
     }];
 }

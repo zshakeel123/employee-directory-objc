@@ -32,8 +32,10 @@
     self.view.backgroundColor = [UIColor systemBackgroundColor];
 
     // 1. Initialize ViewModel
-    self.viewModel = [[EmployeeDirectoryViewModel alloc] initWithBaseURLString: kEmployeeAPIBaseURL
-                                                                       session:[NSURLSession sharedSession]];
+    EmployeeService *employeeService = [[EmployeeService alloc] initWithBaseURLString:kEmployeeAPIBaseURL andSession:[NSURLSession sharedSession]];
+    
+    self.viewModel = [[EmployeeDirectoryViewModel alloc] initWithEmployeeService: employeeService];
+    
     // Set ViewModel's delegate to recieve updates
     self.viewModel.delegate = self;
 
