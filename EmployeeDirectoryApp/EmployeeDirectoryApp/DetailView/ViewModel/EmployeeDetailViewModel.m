@@ -29,7 +29,7 @@
     self = [super init];
     if (self) {
         // Basic properties directly from the Employee model
-        _fullName = employee.fullName ?: @"N/A"; // Provide default for safety
+        _fullName = employee.fullName ?: @"N/A";
         _emailAddress = employee.emailAddress;
         _biography = employee.biography;
         _team = employee.team ?: @"N/A";

@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) UILabel *statusLabel; // To display error or empty state messages
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 // ViewModel
 @property (nonatomic, strong) EmployeeDirectoryViewModel *viewModel;
@@ -40,6 +41,7 @@
     [self setupCollectionView];
     [self setupActivityIndicator];
     [self setupStatusLabel];
+    [self setupRefreshControl];
 
     // Initial UI state update based on ViewModel (before first fetch)
     [self updateUIForViewModelState];
@@ -49,6 +51,17 @@
 }
 
 #pragma mark - UI Setup
+
+- (void)setupRefreshControl {
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    self.refreshControl.tintColor = [UIColor systemGrayColor];
+    [self.refreshControl addTarget:self action:@selector(handleRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
+}
+
+- (void)handleRefresh:(UIRefreshControl *)refreshControl {
+    [self.viewModel fetchEmployees];
+}
 
 - (void)setupCollectionView {
     // Configure Collection View Flow Layout
@@ -164,6 +177,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
         [self updateUIForViewModelState];
+        
+        // End the refresh control's animation when data has been updated
+        if(self.refreshControl.isRefreshing){
+            [self.refreshControl endRefreshing];
+        }
     });
 }
 
@@ -178,6 +196,11 @@
 - (void)employeeDirectoryViewModel:(EmployeeDirectoryViewModel *)sender didEncounterError:(nullable NSString *)errorMessage {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateUIForViewModelState];
+        
+        // Also end the refresh control's animation if an error occurs
+        if (self.refreshControl.isRefreshing) {
+            [self.refreshControl endRefreshing];
+        }
     });
 }
 

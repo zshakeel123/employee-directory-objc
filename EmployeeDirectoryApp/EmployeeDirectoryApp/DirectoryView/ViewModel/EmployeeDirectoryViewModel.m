@@ -64,7 +64,7 @@
             return;
         }
         
-        strongSelf.isLoading = NO; // Always set loading to NO when the request completes
+        strongSelf.isLoading = NO;
 
         if (employeeList) {
             BOOL isMalformed = NO;
@@ -72,25 +72,20 @@
 
             // Iterate through the fetched employees and validate each one
             for (Employee *employee in employeeList.employees) {
-                if ([employee isValidEmployee]) { // Use the new validation method
+                if ([employee isValidEmployee]) {
                     [validEmployees addObject:employee];
                 } else {
+                    // As per requirement, invalidate the entire list on first malformed employee
                     NSLog(@"Malformed employee found: %@", employee.uuid);
-                    isMalformed = YES; // Mark the entire list as malformed
-                    break; // As per requirement, invalidate the entire list on first malformed employee
+                    isMalformed = YES;
+                    break;
                 }
             }
 
             if (isMalformed) {
                 // If any employee was malformed, invalidate the entire list and set error
-                strongSelf.employees = @[]; // Clear the list
-                strongSelf.errorMessage = @"Employee List is Malformed."; // Specific error message
-                
-                // You might also want to create a specific NSError object here if the ViewController needs it
-                // NSError *malformedError = [NSError errorWithDomain:EmployeeServiceErrorDomain
-                //                                                 code:EmployeeServiceErrorCodeMalformedEmployeeData
-                //                                             userInfo:@{NSLocalizedDescriptionKey: strongSelf.errorMessage}];
-                // If you pass an NSError, adjust the delegate to include it.
+                strongSelf.employees = @[];
+                strongSelf.errorMessage = @"Employee List is Malformed.";
             } else {
                 // All employees are valid
                 strongSelf.employees = [validEmployees copy];
