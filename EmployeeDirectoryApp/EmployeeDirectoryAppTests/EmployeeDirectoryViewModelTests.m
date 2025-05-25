@@ -73,7 +73,6 @@ extern NSString *const EmployeeServiceErrorDomain;
     self.viewModel = [[EmployeeDirectoryViewModel alloc] initWithEmployeeService:self.mockService];
     self.mockDelegate = [[MockEmployeeDirectoryViewModelDelegate alloc] init];
     self.viewModel.delegate = self.mockDelegate;
-    // resetMockState is called in MockEmployeeDirectoryViewModelDelegate's init, so no need here.
 }
 
 - (void)tearDown {
@@ -219,5 +218,34 @@ extern NSString *const EmployeeServiceErrorDomain;
     XCTAssertFalse(self.mockDelegate.isLoadingState, @"Delegate should report loading state as NO.");
 }
 
+- (void)testViewModel_FetchFailure_JSONParsingError {
+    // Arrange: Mock JSON parsing error
+    NSError *mockError = [NSError errorWithDomain:EmployeeServiceErrorDomain
+                                             code:EmployeeServiceErrorCodeJSONParsingFailed
+                                         userInfo:@{NSLocalizedDescriptionKey: @"Failed to parse JSON."}];
+    self.mockService.mockEmployeeListResponse = nil;
+    self.mockService.mockError = mockError;
+
+    // Act
+    [self.viewModel fetchEmployees];
+
+    // Assert
+    XCTAssertFalse(self.viewModel.isLoading, @"ViewModel should not be loading.");
+    XCTAssertNotNil(self.viewModel.errorMessage, @"Error message should not be nil.");
+    XCTAssertTrue([self.viewModel.errorMessage containsString:@"Failed to read employee data."], @"Error message should reflect parsing error.");
+    XCTAssertEqual(self.viewModel.employees.count, 0, @"Employees array should be empty on error.");
+    XCTAssertTrue(self.mockDelegate.didEncounterErrorCalled, @"Delegate's didEncounterError should be called.");
+    XCTAssertTrue(self.mockDelegate.didUpdateLoadingStateCalled, @"Delegate's didUpdateLoadingState should have been called.");
+    XCTAssertFalse(self.mockDelegate.isLoadingState, @"Delegate should report loading state as NO.");
+}
+
+- (void)testViewModel_InitializationWithNilService {
+    // Arrange: Attempt to initialize ViewModel with a nil service
+    EmployeeDirectoryViewModel *nilServiceViewModel = [[EmployeeDirectoryViewModel alloc] initWithEmployeeService:nil];
+
+    // Assert: The initializer should return nil if the service is nil,
+    // Based on your ViewModel's `initWithEmployeeService:`, it returns nil if service is nil.
+    XCTAssertNil(nilServiceViewModel, @"ViewModel should return nil if initialized with a nil EmployeeService.");
+}
 
 @end
