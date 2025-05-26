@@ -31,19 +31,34 @@
         // Basic properties directly from the Employee model
         _fullName = employee.fullName ?: @"N/A";
         _emailAddress = employee.emailAddress;
-        _biography = employee.biography;
+        if(employee.biography){
+            _biography = employee.biography;
+        }
+        else {
+            _biography = nil;
+        }
+        
         _team = employee.team ?: @"N/A";
-
-        _photoURLSmall = [[NSURL alloc] initWithString: employee.photoUrlSmall];
-        _photoURLLarge = [[NSURL alloc] initWithString: employee.photoUrlLarge];
-
+        
+        if (employee.photoUrlSmall) {
+            _photoURLSmall = [[NSURL alloc] initWithString:employee.photoUrlSmall];
+        } else {
+            _photoURLSmall = nil;
+        }
+        
+        if (employee.photoUrlLarge) {
+            _photoURLLarge = [[NSURL alloc] initWithString:employee.photoUrlLarge];
+        } else {
+            _photoURLLarge = nil;
+        }
+        
         // Format phone number if available
         if (employee.phoneNumber) {
             _phoneNumber = [self formattedPhoneNumber:employee.phoneNumber];
         } else {
             _phoneNumber = nil;
         }
-
+        
         // Convert EmployeeType enum to a user-friendly string
         _employeeType = [self stringForEmployeeType:employee.employeeType];
     }
