@@ -6,6 +6,7 @@
 //
 
 #import "EmployeeDetailViewController.h"
+#import "EmployeeDirectoryApp-Swift.h"
 
 @interface EmployeeDetailViewController ()
 // No additional private properties needed here, as all UI elements are IBOutlets
@@ -87,47 +88,12 @@
 
     self.biographyLabel.text = self.viewModel.biography;
     self.biographyStackView.hidden = (self.viewModel.biography == nil || self.viewModel.biography.length == 0);
-
-
-    // --- Image Loading ---
-    [self.photoActivityIndicator startAnimating];
     
-    NSURL *imageURL = self.viewModel.photoURLLarge;
-
-    if (imageURL) {
-        __weak typeof(self) weakSelf = self;
-        NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithURL:imageURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf) return; // View controller might have been deallocated
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.photoActivityIndicator stopAnimating]; // Stop indicator on main thread
-                strongSelf.photoActivityIndicator.hidden = YES;
-                if (error) {
-                    NSLog(@"Error loading detail image: %@", error.localizedDescription);
-                    strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"exclamationmark.circle.fill"]; // Error placeholder
-                    strongSelf.employeePhotoImageView.tintColor = [UIColor systemRedColor];
-                } else if (data) {
-                    UIImage *image = [UIImage imageWithData:data];
-                    if (image) {
-                        strongSelf.employeePhotoImageView.image = image;
-                        strongSelf.employeePhotoImageView.tintColor = nil; // Remove tint for actual image
-                    } else {
-                        strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.crop.circle.fill"]; // Fallback if data is not an image
-                        strongSelf.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
-                    }
-                } else {
-                    strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.crop.circle.fill"]; // Fallback if no data
-                    strongSelf.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
-                }
-            });
-        }];
-        [dataTask resume];
-    } else {
-        // No image URL provided, stop indicator and show default placeholder
-        [self.photoActivityIndicator stopAnimating];
-        self.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.crop.circle.fill"];
-        self.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
+    // load the image
+    if(self.viewModel.photoURLLarge){
+        [KingfisherWrapper setImageOn:self.employeePhotoImageView
+                             urlString:self.viewModel.photoURLLarge
+                    activityIndicator:self.photoActivityIndicator];
     }
 }
 

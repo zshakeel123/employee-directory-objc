@@ -18,8 +18,8 @@
 @property (nonatomic, copy, readwrite) NSString *team;
 @property (nonatomic, copy, readwrite) NSString *employeeType;
 
-@property (nonatomic, strong, readwrite, nullable) NSURL *photoURLSmall;
-@property (nonatomic, strong, readwrite, nullable) NSURL *photoURLLarge;
+@property (nonatomic, strong, readwrite, nullable) NSString *photoURLSmall;
+@property (nonatomic, strong, readwrite, nullable) NSString *photoURLLarge;
 
 @end
 
@@ -41,13 +41,13 @@
         _team = employee.team ?: @"N/A";
         
         if (employee.photoUrlSmall) {
-            _photoURLSmall = [[NSURL alloc] initWithString:employee.photoUrlSmall];
+            _photoURLSmall = employee.photoUrlSmall;
         } else {
             _photoURLSmall = nil;
         }
         
         if (employee.photoUrlLarge) {
-            _photoURLLarge = [[NSURL alloc] initWithString:employee.photoUrlLarge];
+            _photoURLLarge = employee.photoUrlLarge;
         } else {
             _photoURLLarge = nil;
         }

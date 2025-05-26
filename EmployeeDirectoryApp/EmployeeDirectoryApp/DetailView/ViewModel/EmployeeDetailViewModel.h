@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *employeeType; // User-friendly string
 
 // Photo URLs for potential image loading in the view
-@property (nonatomic, strong, readonly, nullable) NSURL *photoURLSmall;
-@property (nonatomic, strong, readonly, nullable) NSURL *photoURLLarge;
+@property (nonatomic, strong, readonly, nullable) NSString *photoURLSmall;
+@property (nonatomic, strong, readonly, nullable) NSString *photoURLLarge;
 
 /**
  * @brief Initializes the view model with a specific Employee object.

@@ -92,8 +92,8 @@
     XCTAssertEqualObjects(viewModel.biography, @"A dedicated software engineer.", @"Biography should match.");
     XCTAssertEqualObjects(viewModel.team, @"Engineering", @"Team should match.");
     XCTAssertEqualObjects(viewModel.employeeType, @"Full Time", @"Employee type should be 'Full Time'.");
-    XCTAssertEqualObjects(viewModel.photoURLSmall.absoluteString, @"https://example.com/small.jpg", @"Small photo URL should match.");
-    XCTAssertEqualObjects(viewModel.photoURLLarge.absoluteString, @"https://example.com/large.jpg", @"Large photo URL should match.");
+    XCTAssertEqualObjects(viewModel.photoURLSmall, @"https://example.com/small.jpg", @"Small photo URL should match.");
+    XCTAssertEqualObjects(viewModel.photoURLLarge, @"https://example.com/large.jpg", @"Large photo URL should match.");
 }
 
 - (void)testViewModel_PhoneNumberFormatting_InvalidFormat {

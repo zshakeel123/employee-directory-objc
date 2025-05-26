@@ -6,6 +6,7 @@
 //
 
 #import "EmployeeCollectionViewCell.h"
+#import "EmployeeDirectoryApp-Swift.h"
 
 // Define the reuse identifier's value
 NSString *const EmployeeCollectionViewCellReuseIdentifier = @"EmployeeCell";
@@ -145,49 +146,12 @@ NSString *const EmployeeCollectionViewCellReuseIdentifier = @"EmployeeCell";
     // Reset to default placeholder and start indicator before loading a new image
     self.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.circle.fill"];
     self.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
-    [self.photoActivityIndicator startAnimating];
-
-    NSURL *imageURL = [[NSURL alloc] initWithString:employee.photoUrlSmall];
-
-    if (imageURL) {
-        __weak typeof(self) weakSelf = self; // Weak reference to self to prevent retain cycle
-        
-        self.currentImageTask = [[NSURLSession sharedSession] dataTaskWithURL:imageURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-            __strong typeof(weakSelf) strongSelf = weakSelf; // Strong reference inside block
-
-            if (!strongSelf) return; // If cell is already deallocated, do nothing
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [strongSelf.photoActivityIndicator stopAnimating]; // Stop indicator on main thread
-
-                if (error) {
-                    NSLog(@"Error loading image for %@: %@", employee.fullName, error.localizedDescription);
-                    strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"exclamationmark.circle.fill"]; // Error placeholder
-                    strongSelf.employeePhotoImageView.tintColor = [UIColor systemRedColor]; // Red tint for error
-                } else if (data) {
-                    UIImage *image = [UIImage imageWithData:data];
-                    if (image) {
-                        strongSelf.employeePhotoImageView.image = image;
-                        strongSelf.employeePhotoImageView.tintColor = nil; // Clear tint for actual image
-                    } else {
-                        // Data was received but couldn't be converted to an image
-                        strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.circle.fill"]; // Fallback to default
-                        strongSelf.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
-                    }
-                } else {
-                    // No data received
-                    strongSelf.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.circle.fill"]; // Fallback to default
-                    strongSelf.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
-                }
-                strongSelf.currentImageTask = nil; // Clear the task reference
-            });
-        }];
-        [self.currentImageTask resume]; // Start the network task
-    } else {
-        // No valid URL provided, just stop indicator and show default placeholder
-        [self.photoActivityIndicator stopAnimating];
-        self.employeePhotoImageView.image = [UIImage systemImageNamed:@"person.circle.fill"];
-        self.employeePhotoImageView.tintColor = [UIColor systemGrayColor];
+    
+    // load the image
+    if(employee.photoUrlSmall){
+        [KingfisherWrapper setImageOn:self.employeePhotoImageView
+                             urlString:employee.photoUrlSmall
+                    activityIndicator:self.photoActivityIndicator];
     }
 }
 
