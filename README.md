@@ -127,6 +127,52 @@ Kingfisher: For robust and efficient image loading and caching.
 Integrated via Swift Package Manager.
 (Note: The project intentionally limits third-party dependencies to focus on demonstrating core iOS development skills and architecture.)
 
+## 📌 What I Would Do Differently in a Production Setting ##
+Since this is a sample project built within limited time, some decisions were made for speed and demonstration purposes. If this were a real-world organizational project, here’s what I would approach differently:
+
+**1. Consistency in UI Implementation**
+
+The EmployeeDirectoryView is fully programmatic, while EmployeeDetailView is built using Storyboard.
+
+This was intentional to demonstrate proficiency in both approaches.
+
+In a production setting, I would choose a consistent strategy (either fully programmatic or Storyboard-based), aligned with the team’s coding standards.
+
+**2. Use of Organization-Wide Frameworks**
+
+Image loading (using Kingfisher) and API calls (via URLSession) were done directly.
+
+In a real-world app, I would integrate the organization's custom wrappers or SDKs for networking and image caching to maintain consistency and compatibility with internal tooling.
+
+**3. Design System & Reusable Components**
+
+Basic UIKit components (UILabel, UIButton, etc.) are used in this sample.
+
+In production, I would use reusable UI components from the organization’s design system or component library to ensure consistency and scalability.
+
+**4. Centralized Styling**
+
+Colors, fonts, paddings, and layout constants are currently hardcoded in view controllers.
+
+These should be centralized in a dedicated theme or style system to promote reusability and consistent design across the app.
+
+**5. Crash Logging & Analytics**
+
+The current project lacks crash reporting and event tracking.
+
+In production, I would integrate tools like Firebase Crashlytics, Sentry, or internal analytics platforms to monitor crashes and user behavior.
+
+**7. Localization & Accessibility**
+
+Currently, strings are hardcoded and accessibility features are not fully implemented.
+
+For production, I would ensure full localization support and follow accessibility best practices to make the app inclusive for all users.
+
+**8. Other Enhancements**
+
+Additional features such as offline caching in Core Data or Sqllite & severalother things to improve the overall experience.
+
+
 ## Contact ##
 
 For any questions or further discussion about this project, please feel free to reach out.
