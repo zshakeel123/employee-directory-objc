@@ -144,7 +144,7 @@ extern NSString *const EmployeeServiceErrorDomain;
 
 - (void)testFetchEmployees_Non200StatusCode {
     // 1. Arrange
-    NSData *mockData = [self sampleValidEmployeeJSONData]; // Data can be valid, but status code implies error
+    NSData *mockData = [self sampleValidEmployeeJSONData];
     NSURLResponse *mockResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@"https://test.com"] statusCode:404 HTTPVersion:nil headerFields:nil]; // 404 Not Found
 
     MockURLSession *mockSession = [[MockURLSession alloc] init];

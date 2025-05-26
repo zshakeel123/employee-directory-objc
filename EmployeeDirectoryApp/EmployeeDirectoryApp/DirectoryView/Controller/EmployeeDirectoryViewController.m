@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) UILabel *statusLabel; // To display error or empty state messages
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) UIButton *retryButton;
 
 // ViewModel
 @property (nonatomic, strong) EmployeeDirectoryViewModel *viewModel;
@@ -44,6 +45,7 @@
     [self setupActivityIndicator];
     [self setupStatusLabel];
     [self setupRefreshControl];
+    [self setupRetryButton];
 
     // Initial UI state update based on ViewModel (before first fetch)
     [self updateUIForViewModelState];
@@ -124,6 +126,27 @@
         [self.statusLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor constant:20],
         [self.statusLabel.trailingAnchor constraintLessThanOrEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor constant:-20]
     ]];
+}
+
+- (void)setupRetryButton {
+    self.retryButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.retryButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.retryButton setTitle:@"Try Again" forState:UIControlStateNormal];
+    self.retryButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    [self.retryButton addTarget:self action:@selector(handleRetryButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    self.retryButton.hidden = YES; // Initially hidden
+
+    [self.view addSubview:self.retryButton];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [self.retryButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.retryButton.topAnchor constraintEqualToAnchor:self.statusLabel.bottomAnchor constant:20] // Below status label
+    ]];
+}
+
+// Retry button handler
+- (void)handleRetryButtonTapped:(UIButton *)sender {
+    [self.viewModel fetchEmployees];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -208,31 +231,47 @@
 
 #pragma mark - UI State Management
 
-// Centralized method to update the UI based on the ViewModel's current state
 - (void)updateUIForViewModelState {
     if (self.viewModel.isLoading) {
-        // Show loading indicator, hide everything else
-        [self.activityIndicator startAnimating];
-        self.statusLabel.hidden = YES;
-        self.collectionView.hidden = YES;
+        // If the refresh control is active, its loader is sufficient.
+        // Otherwise, show the central activity indicator for initial load
+        if (self.refreshControl.isRefreshing) {
+            [self.activityIndicator stopAnimating];
+            self.activityIndicator.hidden = YES;
+            self.retryButton.hidden = YES;
+            self.statusLabel.hidden = YES;
+            self.collectionView.hidden = NO;
+        } else {
+            // This is for initial load
+            // Show central activity indicator, hide everything else including retry button.
+            [self.activityIndicator startAnimating];
+            self.activityIndicator.hidden = NO;
+            self.statusLabel.hidden = YES;
+            self.collectionView.hidden = YES;
+            self.retryButton.hidden = YES;
+        }
     } else {
-        // Stop loading indicator
+        // Not loading (fetch completed, either success or error)
         [self.activityIndicator stopAnimating];
+        self.activityIndicator.hidden = YES;
 
         if (self.viewModel.errorMessage) {
-            // Show error message
+            // Show error message and retry button
             self.statusLabel.text = self.viewModel.errorMessage;
             self.statusLabel.hidden = NO;
             self.collectionView.hidden = YES;
+            self.retryButton.hidden = NO;
         } else if (self.viewModel.employees.count == 0) {
-            // Show empty state message (no error, but no data)
+            // Show empty state message and retry button
             self.statusLabel.text = @"No employees found.";
             self.statusLabel.hidden = NO;
             self.collectionView.hidden = YES;
+            self.retryButton.hidden = NO;
         } else {
-            // Data loaded successfully, show collection view
+            // Data loaded successfully, show collection view, hide status/retry.
             self.statusLabel.hidden = YES;
             self.collectionView.hidden = NO;
+            self.retryButton.hidden = YES;
         }
     }
 }

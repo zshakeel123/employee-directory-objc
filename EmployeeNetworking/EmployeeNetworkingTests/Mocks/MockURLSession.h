@@ -21,7 +21,6 @@ typedef void (^MockSessionCompletionHandler)(NSData * _Nullable data, NSURLRespo
 @property (nonatomic, strong, nullable) NSData *mockData;
 @property (nonatomic, strong, nullable) NSURLResponse *mockResponse;
 @property (nonatomic, strong, nullable) NSError *mockError;
-@property (nonatomic, copy, nullable) MockSessionCompletionHandler mockCompletionHandler; // For specific handling
 
 @end
 

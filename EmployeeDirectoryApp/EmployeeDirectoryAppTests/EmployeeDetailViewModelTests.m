@@ -152,10 +152,7 @@
     EmployeeDetailViewModel *coViewModel = [[EmployeeDetailViewModel alloc] initWithEmployee:contractorEmployee];
     XCTAssertEqualObjects(coViewModel.employeeType, @"Contractor", @"Employee type should map to 'Contractor'.");
 
-    // Test Unknown/Default (if your EmployeeType has an 'unknown' or default case)
-    // To test this, you'd need to create an Employee with an 'invalid' employee_type string
-    // that defaults to EmployeeTypeUnknown in your Employee model's initWithDictionary.
-    // Assuming EmployeeType has a default case for unknown values:
+    // Test Unknown/Default as EmployeeType
     Employee *unknownTypeEmployee = [self createEmployeeWithUUID:@"U1" name:@"Unknown Type" email:@"ut@ex.com" phoneNumber:nil biography:nil team:@"Misc" employeeType:(EmployeeType)999 photoUrlSmall:nil photoUrlLarge:nil]; // Cast to simulate unknown enum
     EmployeeDetailViewModel *utViewModel = [[EmployeeDetailViewModel alloc] initWithEmployee:unknownTypeEmployee];
     XCTAssertEqualObjects(utViewModel.employeeType, @"Unknown", @"Employee type should map to 'Unknown' for unrecognized types.");

@@ -162,6 +162,8 @@ NSString *const EmployeeServiceErrorDomain = @"com.zeeshan.EmployeeNetworking.Er
 
         // 10. Call the completion block on the main thread
         if (completion) {
+            // I am intentionally giving a delay so as to show activity indicator for the loading.
+            [NSThread sleepForTimeInterval:1.0];
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(employeeList, nil);
             });
