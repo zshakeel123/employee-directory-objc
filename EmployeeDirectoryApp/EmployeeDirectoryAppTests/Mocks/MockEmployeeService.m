@@ -21,10 +21,13 @@
 
 // Override the fetch method to provide mock data/error
 - (void)fetchEmployeesWithCompletion:(EmployeeFetchCompletionBlock)completion {
-    // Call the completion handler so as to notify the caller for the response.
-    if (completion) {
-        completion(self.mockEmployeeListResponse, self.mockError);
-    }
+    // Dispatch to a background queue to simulate real async behavior
+    dispatch_queue_t backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(backgroundQueue, ^{
+        if (completion) {
+            completion(self.mockEmployeeListResponse, self.mockError);
+        }
+    });
 }
 
 @end
