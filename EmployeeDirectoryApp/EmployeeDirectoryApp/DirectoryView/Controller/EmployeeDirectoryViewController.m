@@ -283,21 +283,26 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     // Get the selected employee
-        Employee *selectedEmployee = self.viewModel.employees[indexPath.item];
+    Employee *selectedEmployee = self.viewModel.employees[indexPath.item];
+    
+    // Perform the segue to navigate to detail view controller
+    [self performSegueWithIdentifier:kShowEmployeeDetailSegueIdentifier sender:selectedEmployee];
+}
 
-        // Create the EmployeeDetailViewModel
-        EmployeeDetailViewModel *detailViewModel = [[EmployeeDetailViewModel alloc] initWithEmployee:selectedEmployee];
-
-        // instantiate EmployeeDetailViewController from Storyboard
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-
-        // Instantiate the view controller using its Storyboard ID
-        EmployeeDetailViewController *detailVC = [storyboard instantiateViewControllerWithIdentifier:@"EmployeeDetailViewControllerID"];
-
-        // Pass the ViewModel to the detail view controller
-        detailVC.viewModel = detailViewModel;
-        
-        [self.navigationController pushViewController:detailVC animated:YES];
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:kShowEmployeeDetailSegueIdentifier]){
+        if([segue.destinationViewController isKindOfClass:[EmployeeDetailViewController class]]){
+            EmployeeDetailViewController * detailVC = (EmployeeDetailViewController *)segue.destinationViewController;
+            
+            if([sender isKindOfClass:[Employee class]]){
+                Employee *selectedEmployee = (Employee *)sender;
+                
+                // Create the EmployeeDetailViewModel and pass it
+                EmployeeDetailViewModel *detailViewModel = [[EmployeeDetailViewModel alloc] initWithEmployee:selectedEmployee];
+                detailVC.viewModel = detailViewModel;
+            }
+        }
+    }
 }
 
 @end

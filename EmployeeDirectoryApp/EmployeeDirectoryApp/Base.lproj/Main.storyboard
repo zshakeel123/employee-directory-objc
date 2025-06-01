@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5bd-C5-FfO">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -20,6 +21,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="5GF-o3-CZq"/>
+                    <connections>
+                        <segue destination="cbw-Bo-TrM" kind="show" identifier="ShowEmployeeDetailSegue" id="0wC-LZ-PWP"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -34,7 +38,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cfR-oz-WSE">
-                                <rect key="frame" x="0.0" y="118" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="162" width="393" height="622"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yMx-LI-z9R">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="446.66666666666669"/>
@@ -46,7 +50,7 @@
                                                 </constraints>
                                             </imageView>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="iTI-kg-ZGp">
-                                                <rect key="frame" x="186.66666666666666" y="108.33333333333334" width="20" height="20"/>
+                                                <rect key="frame" x="186.66666666666666" y="108.33333333333331" width="20" height="20"/>
                                             </activityIndicatorView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="PB6-Gd-dr3">
                                                 <rect key="frame" x="24" y="236.66666666666669" width="345" height="182"/>
@@ -166,6 +170,7 @@
                             <constraint firstItem="uGX-LX-TE9" firstAttribute="trailing" secondItem="cfR-oz-WSE" secondAttribute="trailing" id="vwF-Vj-YFF"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="TPa-q8-ZVP"/>
                     <connections>
                         <outlet property="biographyLabel" destination="ZxN-wv-Umk" id="tui-Zn-6cV"/>
                         <outlet property="biographyStackView" destination="s5I-pZ-Oeg" id="txs-lw-4HO"/>
