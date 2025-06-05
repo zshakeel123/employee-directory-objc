@@ -182,6 +182,7 @@
 					};
 					B3357E6C2DE31CC2000D1F3B = {
 						CreatedOnToolsVersion = 16.3;
+						LastSwiftMigration = 1630;
 						TestTargetID = B32BCE072DDE06AA001BABAF;
 					};
 				};
@@ -433,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -440,6 +442,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zeeshan.EmployeeDirectoryAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmployeeDirectoryApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EmployeeDirectoryApp";
 			};
@@ -449,6 +453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -456,6 +461,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.zeeshan.EmployeeDirectoryAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EmployeeDirectoryApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EmployeeDirectoryApp";
 			};
